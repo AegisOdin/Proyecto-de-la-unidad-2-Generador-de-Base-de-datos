@@ -1,0 +1,10 @@
+com\compilador\model\Atributo.class
+com\compilador\parser\TParser.class
+com\compilador\dto\CompiladorRequest.class
+com\compilador\dto\CompiladorResponse.class
+com\compilador\config\WebConfig.class
+com\compilador\model\Tabla.class
+com\compilador\parser\TLexer.class
+com\compilador\controller\CompiladorController.class
+com\compilador\CompiladorApplication.class
+com\compilador\service\CompiladorService.class

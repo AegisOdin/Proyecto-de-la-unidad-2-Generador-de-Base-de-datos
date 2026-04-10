@@ -1,0 +1,14 @@
+export default defineNuxtConfig({
+  modules: ['nuxt-monaco-editor'],
+  ssr: false,
+  devtools: { enabled: false },
+  app: {
+    head: {
+      title: 'Generador de Base de Datos',
+      meta: [
+        { charset: 'utf-8' },
+        { name: 'viewport', content: 'width=device-width, initial-scale=1' }
+      ]
+    }
+  }
+})
