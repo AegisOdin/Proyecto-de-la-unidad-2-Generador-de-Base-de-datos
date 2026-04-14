@@ -58,21 +58,24 @@
 <script setup lang="ts">
 const defaultCode = `crear empresa
 usar empresa
+
 tabla depto
 inicio
-nombre letras
-codigo letras
-num numeros
-funciones letras
+  nombre    letras
+  codigo    letras
+  num       numeros
+  funciones letras
 fin
+
 tabla empleado
 inicio
-nombre letras
-edad numeros
-fechanac fecha
-salario numeros
-depende_de depto
+  nombre     letras
+  edad       numeros
+  fechanac   fecha
+  salario    numeros
+  depende_de depto
 fin
+
 cerrar`
 
 const codigo = ref(defaultCode)
