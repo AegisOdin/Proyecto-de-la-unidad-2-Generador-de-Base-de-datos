@@ -1,4 +1,4 @@
-import type { CompiladorResponse, Estado } from '~/types'
+import type { CompiladorResponse, Estado, EjecutarResponse } from '~/types'
 
 export function useCompilador() {
   const estado = ref<Estado>('idle')
@@ -56,12 +56,21 @@ export function useCompilador() {
     }
   }
 
+  async function ejecutar(usuario: string, contrasena: string, baseDatos: string, sql: string): Promise<EjecutarResponse> {
+    const response = await $fetch<EjecutarResponse>('http://localhost:8080/api/ejecutar', {
+      method: 'POST',
+      body: { usuario, contrasena, baseDatos, sql }
+    })
+    return response
+  }
+
   return {
     estado,
     resultado,
     errorConexion,
     compilar,
     descargarSQL,
-    descargarEstructura
+    descargarEstructura,
+    ejecutar
   }
 }

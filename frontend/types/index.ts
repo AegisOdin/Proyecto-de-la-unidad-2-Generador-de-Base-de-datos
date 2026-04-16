@@ -5,3 +5,8 @@ export interface CompiladorResponse {
 }
 
 export type Estado = 'idle' | 'loading' | 'error' | 'success'
+
+export interface EjecutarResponse {
+  exito: boolean
+  mensaje: string
+}
