@@ -19,6 +19,23 @@ public class EjecutarService {
         String baseDatos = request.getBaseDatos();
         String sql = request.getSql();
 
+        // Validación de campos requeridos
+        if (usuario == null || usuario.isBlank() ||
+            contrasena == null ||
+            baseDatos == null || baseDatos.isBlank() ||
+            sql == null || sql.isBlank()) {
+            response.setExito(false);
+            response.setMensaje("Faltan campos requeridos");
+            return response;
+        }
+
+        // Validación del nombre de la base de datos (solo letras, números y guión bajo)
+        if (!baseDatos.matches("[a-zA-Z][a-zA-Z0-9_]{0,62}")) {
+            response.setExito(false);
+            response.setMensaje("Nombre de base de datos inválido. Use solo letras, números y guión bajo.");
+            return response;
+        }
+
         // Paso 1: Crear la BD conectándose a la BD de mantenimiento 'postgres'
         String urlPostgres = "jdbc:postgresql://localhost:5432/postgres";
         try (Connection conn = DriverManager.getConnection(urlPostgres, usuario, contrasena);
