@@ -50,16 +50,10 @@ export function useCompilador() {
     }
   }
 
-  function descargarEstructura() {
-    if (resultado.value?.estructura) {
-      descargarArchivo(resultado.value.estructura, 'estructura.txt')
-    }
-  }
-
-  async function ejecutar(usuario: string, contrasena: string, baseDatos: string, sql: string): Promise<EjecutarResponse> {
+  async function ejecutar(usuario: string, contrasena: string, sql: string): Promise<EjecutarResponse> {
     const response = await $fetch<EjecutarResponse>('http://localhost:8080/api/ejecutar', {
       method: 'POST',
-      body: { usuario, contrasena, baseDatos, sql }
+      body: { usuario, contrasena, sql }
     })
     return response
   }
@@ -70,7 +64,6 @@ export function useCompilador() {
     errorConexion,
     compilar,
     descargarSQL,
-    descargarEstructura,
     ejecutar
   }
 }

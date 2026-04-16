@@ -34,7 +34,7 @@ class EjecutarControllerTest {
 
         mockMvc.perform(post("/api/ejecutar")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"usuario\":\"postgres\",\"contrasena\":\"1234\",\"baseDatos\":\"empresa\",\"sql\":\"CREATE TABLE test (id INTEGER);\"}"))
+                .content("{\"usuario\":\"postgres\",\"contrasena\":\"1234\",\"sql\":\"CREATE DATABASE empresa;\\n\\\\c empresa;\\nCREATE TABLE test (id INTEGER);\"}"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.exito").value(true))
                 .andExpect(jsonPath("$.mensaje").value("Base de datos creada exitosamente"));

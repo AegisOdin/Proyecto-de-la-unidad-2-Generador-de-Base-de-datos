@@ -45,9 +45,6 @@
           <button class="btn descargar" :disabled="!resultado?.sql" @click="descargarSQL">
             Descargar SQL
           </button>
-          <button class="btn descargar-alt" :disabled="!resultado?.estructura" @click="descargarEstructura">
-            Descargar Estructura
-          </button>
           <button class="btn ejecutar" :disabled="estado !== 'success'" @click="modalAbierto = true">
             Ejecutar en BD
           </button>
@@ -65,8 +62,6 @@
           <input v-model="formUsuario" type="text" placeholder="postgres" />
           <label>Contraseña</label>
           <input v-model="formContrasena" type="password" placeholder="Contraseña" />
-          <label>Base de datos</label>
-          <input v-model="formBaseDatos" type="text" placeholder="Nombre de la base de datos" />
         </div>
         <div class="modal-footer">
           <button class="btn compilar" :disabled="ejecutando" @click="handleEjecutar">
@@ -111,19 +106,18 @@ fin
 cerrar`
 
 const codigo = ref(defaultCode)
-const { estado, resultado, compilar, descargarSQL, descargarEstructura, ejecutar } = useCompilador()
+const { estado, resultado, compilar, descargarSQL, ejecutar } = useCompilador()
 
 const modalAbierto = ref(false)
 const ejecutando = ref(false)
 const formUsuario = ref('postgres')
 const formContrasena = ref('')
-const formBaseDatos = ref('')
 const toast = ref({ visible: false, exito: false, mensaje: '' })
 
 async function handleEjecutar() {
   ejecutando.value = true
   try {
-    const res = await ejecutar(formUsuario.value, formContrasena.value, formBaseDatos.value, resultado.value!.sql)
+    const res = await ejecutar(formUsuario.value, formContrasena.value, resultado.value!.sql)
     toast.value = { visible: true, exito: res.exito, mensaje: res.mensaje }
     modalAbierto.value = false
   } catch (e: unknown) {

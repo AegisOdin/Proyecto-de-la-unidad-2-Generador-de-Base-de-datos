@@ -16,23 +16,39 @@ public class EjecutarService {
         EjecutarResponse response = new EjecutarResponse();
         String usuario = request.getUsuario();
         String contrasena = request.getContrasena();
-        String baseDatos = request.getBaseDatos();
         String sql = request.getSql();
 
         // Validación de campos requeridos
         if (usuario == null || usuario.isBlank() ||
             contrasena == null ||
-            baseDatos == null || baseDatos.isBlank() ||
             sql == null || sql.isBlank()) {
             response.setExito(false);
             response.setMensaje("Faltan campos requeridos");
             return response;
         }
 
-        // Validación del nombre de la base de datos (solo letras, números y guión bajo)
+        // Extraer nombre de BD del SQL generado (línea CREATE DATABASE <nombre>)
+        String baseDatos = null;
+        for (String sentencia : sql.split(";")) {
+            String trimmed = sentencia.trim();
+            if (trimmed.toUpperCase().startsWith("CREATE DATABASE")) {
+                String[] parts = trimmed.split("\\s+");
+                if (parts.length >= 3) {
+                    baseDatos = parts[2];
+                }
+                break;
+            }
+        }
+        if (baseDatos == null || baseDatos.isBlank()) {
+            response.setExito(false);
+            response.setMensaje("No se encontró CREATE DATABASE en el SQL");
+            return response;
+        }
+
+        // Validación del nombre extraído
         if (!baseDatos.matches("[a-zA-Z][a-zA-Z0-9_]{0,62}")) {
             response.setExito(false);
-            response.setMensaje("Nombre de base de datos inválido. Use solo letras, números y guión bajo.");
+            response.setMensaje("Nombre de base de datos inválido en el SQL");
             return response;
         }
 

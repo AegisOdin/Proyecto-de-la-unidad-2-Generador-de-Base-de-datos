@@ -3,7 +3,6 @@ package com.compilador.dto;
 public class EjecutarRequest {
     private String usuario;
     private String contrasena;
-    private String baseDatos;
     private String sql;
 
     public String getUsuario() {
@@ -20,14 +19,6 @@ public class EjecutarRequest {
 
     public void setContrasena(String contrasena) {
         this.contrasena = contrasena;
-    }
-
-    public String getBaseDatos() {
-        return baseDatos;
-    }
-
-    public void setBaseDatos(String baseDatos) {
-        this.baseDatos = baseDatos;
     }
 
     public String getSql() {

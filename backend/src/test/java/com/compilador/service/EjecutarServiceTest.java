@@ -15,8 +15,7 @@ class EjecutarServiceTest {
         EjecutarRequest request = new EjecutarRequest();
         request.setUsuario("usuario_inexistente");
         request.setContrasena("contrasena_incorrecta");
-        request.setBaseDatos("bd_inexistente");
-        request.setSql("CREATE TABLE test (id INTEGER);");
+        request.setSql("CREATE DATABASE testdb;\n\\c testdb;\nCREATE TABLE test (id INTEGER);");
 
         EjecutarResponse response = service.ejecutar(request);
 
