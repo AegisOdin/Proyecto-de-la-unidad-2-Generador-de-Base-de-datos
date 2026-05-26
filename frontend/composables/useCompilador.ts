@@ -1,4 +1,6 @@
-import type { CompiladorResponse, Estado, EjecutarResponse } from '~/types'
+import type { CompiladorResponse, Estado, EjecutarResponse, Tabla } from '~/types'
+
+const API_BASE = 'http://localhost:8080'
 
 export function useCompilador() {
   const estado = ref<Estado>('idle')
@@ -10,7 +12,7 @@ export function useCompilador() {
     errorConexion.value = ''
 
     try {
-      const response = await $fetch<CompiladorResponse>('http://localhost:8080/api/compilar', {
+      const response = await $fetch<CompiladorResponse>(`${API_BASE}/api/compilar`, {
         method: 'POST',
         body: { codigo }
       })
@@ -51,11 +53,24 @@ export function useCompilador() {
   }
 
   async function ejecutar(usuario: string, contrasena: string, sql: string): Promise<EjecutarResponse> {
-    const response = await $fetch<EjecutarResponse>('http://localhost:8080/api/ejecutar', {
+    return await $fetch<EjecutarResponse>(`${API_BASE}/api/ejecutar`, {
       method: 'POST',
       body: { usuario, contrasena, sql }
     })
-    return response
+  }
+
+  async function generarCrud(baseDatos: string, tabla: Tabla) {
+    const blob = await $fetch<Blob>(`${API_BASE}/api/generar`, {
+      method: 'POST',
+      body: { baseDatos, tabla },
+      responseType: 'blob'
+    })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `crud_${tabla.nombre}.zip`
+    a.click()
+    URL.revokeObjectURL(url)
   }
 
   return {
@@ -64,6 +79,7 @@ export function useCompilador() {
     errorConexion,
     compilar,
     descargarSQL,
-    ejecutar
+    ejecutar,
+    generarCrud
   }
 }

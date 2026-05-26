@@ -28,6 +28,8 @@ import java.util.List;
     public String getSql() { return sqlBuilder.toString(); }
     public String getEstructura() { return estructuraBuilder.toString(); }
     public List<String> getErrores() { return errores; }
+    public String getNombreBaseDatos() { return nombreBaseDatos; }
+    public List<Tabla> getTablas() { return tablas; }
 
     @Override
     public void displayRecognitionError(String[] tokenNames, RecognitionException e) {

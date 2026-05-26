@@ -1,11 +1,15 @@
 package com.compilador.dto;
 
+import com.compilador.model.Tabla;
+
 import java.util.List;
 
 public class CompiladorResponse {
     private List<String> errores;
     private String sql;
     private String estructura;
+    private String baseDatos;
+    private List<Tabla> tablas;
 
     public List<String> getErrores() {
         return errores;
@@ -29,5 +33,21 @@ public class CompiladorResponse {
 
     public void setEstructura(String estructura) {
         this.estructura = estructura;
+    }
+
+    public String getBaseDatos() {
+        return baseDatos;
+    }
+
+    public void setBaseDatos(String baseDatos) {
+        this.baseDatos = baseDatos;
+    }
+
+    public List<Tabla> getTablas() {
+        return tablas;
+    }
+
+    public void setTablas(List<Tabla> tablas) {
+        this.tablas = tablas;
     }
 }

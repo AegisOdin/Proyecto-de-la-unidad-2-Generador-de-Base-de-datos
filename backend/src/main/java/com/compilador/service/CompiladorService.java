@@ -32,6 +32,8 @@ public class CompiladorService {
             if (errores.isEmpty()) {
                 response.setSql(parser.getSql());
                 response.setEstructura(parser.getEstructura());
+                response.setBaseDatos(parser.getNombreBaseDatos());
+                response.setTablas(parser.getTablas());
             } else {
                 response.setSql("");
                 response.setEstructura("");

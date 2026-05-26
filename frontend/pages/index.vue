@@ -53,6 +53,23 @@
 
     </div>
 
+    <!-- Panel de tablas generadas (CRUD) -->
+    <div v-if="estado === 'success' && resultado?.tablas?.length" class="tablas-panel">
+      <div class="tablas-titulo">Generar aplicación CRUD por tabla</div>
+      <div class="tablas-grid">
+        <div v-for="t in resultado.tablas" :key="t.nombre" class="tabla-card">
+          <div class="tabla-nombre">{{ t.nombre }}</div>
+          <div class="tabla-meta">{{ t.atributos.length }} atributo(s)</div>
+          <div class="tabla-actions">
+            <button class="btn descargar-alt" @click="handleGenerar(t)">Descargar PHP</button>
+            <NuxtLink :to="`/crud/${resultado.baseDatos}/${t.nombre}`" class="btn ejecutar btn-link">
+              Probar en vivo
+            </NuxtLink>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Modal de credenciales -->
     <div v-if="modalAbierto" class="modal-overlay">
       <div class="modal">
@@ -106,7 +123,17 @@ fin
 cerrar`
 
 const codigo = ref(defaultCode)
-const { estado, resultado, compilar, descargarSQL, ejecutar } = useCompilador()
+const { estado, resultado, compilar, descargarSQL, ejecutar, generarCrud } = useCompilador()
+
+async function handleGenerar(tabla: import('~/types').Tabla) {
+  if (!resultado.value?.baseDatos) return
+  try {
+    await generarCrud(resultado.value.baseDatos, tabla)
+  } catch (e: unknown) {
+    const msg = e instanceof Error ? e.message : 'Error generando código'
+    toast.value = { visible: true, exito: false, mensaje: msg }
+  }
+}
 
 const modalAbierto = ref(false)
 const ejecutando = ref(false)
@@ -389,6 +416,67 @@ body {
   background: rgba(244,71,71,0.2);
   color: #f44747;
   border: 1px solid rgba(244,71,71,0.3);
+}
+
+.tablas-panel {
+  background: #252526;
+  border: 1px solid #3e3e3e;
+  border-radius: 6px;
+  padding: 12px 16px;
+}
+
+.tablas-titulo {
+  font-size: 13px;
+  font-weight: 600;
+  color: #569cd6;
+  margin-bottom: 10px;
+}
+
+.tablas-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 10px;
+}
+
+.tabla-card {
+  background: #2d2d2d;
+  border: 1px solid #3e3e3e;
+  border-radius: 6px;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.tabla-nombre {
+  font-size: 14px;
+  font-weight: 700;
+  color: #d4d4d4;
+}
+
+.tabla-meta {
+  font-size: 11px;
+  color: #858585;
+}
+
+.tabla-actions {
+  display: flex;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.tabla-actions .btn {
+  flex: 1;
+  font-size: 11px;
+  padding: 5px 8px;
+  text-align: center;
+}
+
+.btn-link {
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .toast-close {
