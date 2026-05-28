@@ -36,6 +36,16 @@ public class CrudController {
         }
     }
 
+    @GetMapping("/{baseDatos}/{tabla}/columnas")
+    public ResponseEntity<?> columnas(@PathVariable String baseDatos, @PathVariable String tabla) {
+        try {
+            List<String> cols = crudService.columnas(baseDatos, tabla);
+            return ResponseEntity.ok(cols);
+        } catch (Exception e) {
+            return fail(e);
+        }
+    }
+
     @PostMapping("/{baseDatos}/{tabla}")
     public ResponseEntity<?> insertar(@PathVariable String baseDatos, @PathVariable String tabla,
                                        @RequestBody Map<String, Object> data) {

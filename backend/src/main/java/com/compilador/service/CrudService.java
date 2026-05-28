@@ -44,6 +44,20 @@ public class CrudService {
         }
     }
 
+    public List<String> columnas(String baseDatos, String tabla) throws SQLException {
+        validateIdent(tabla);
+        String sql = "SELECT column_name FROM information_schema.columns WHERE table_schema = 'public' AND table_name = ? ORDER BY ordinal_position";
+        try (Connection c = conn(baseDatos);
+             PreparedStatement ps = c.prepareStatement(sql)) {
+            ps.setString(1, tabla);
+            List<String> cols = new ArrayList<>();
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) cols.add(rs.getString("column_name"));
+            }
+            return cols;
+        }
+    }
+
     public Map<String, Object> insertar(String baseDatos, String tabla, Map<String, Object> data) throws SQLException {
         validateIdent(tabla);
         if (data == null || data.isEmpty()) throw new SQLException("Sin datos");

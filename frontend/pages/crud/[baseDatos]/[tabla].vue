@@ -53,13 +53,14 @@ const pk = computed(() => `${tabla}_key`)
 const API = `http://localhost:8080/api/crud/${baseDatos}/${tabla}`
 
 const filas = ref<Record<string, any>[]>([])
+const columnasMeta = ref<string[]>([])
 const error = ref('')
 const editandoId = ref<number | null>(null)
 const formData = ref<Record<string, any>>({})
 
 const columnasConPk = computed(() => {
-  if (!filas.value.length) return []
-  return Object.keys(filas.value[0])
+  if (filas.value.length) return Object.keys(filas.value[0])
+  return columnasMeta.value
 })
 
 const columnas = computed(() => columnasConPk.value.filter(c => c !== pk.value))
@@ -78,9 +79,13 @@ async function listar() {
 
 async function inicializarFormDesdeMeta() {
   try {
-    const t = await $fetch<any>(`http://localhost:8080/api/crud/${baseDatos}/${tabla}`)
-    if (Array.isArray(t) && t.length === 0) {
+    const cols = await $fetch<any>(`http://localhost:8080/api/crud/${baseDatos}/${tabla}/columnas`)
+    if (Array.isArray(cols)) {
+      columnasMeta.value = cols
       formData.value = {}
+      for (const c of cols) {
+        if (c !== pk.value) formData.value[c] = ''
+      }
     }
   } catch {}
 }
