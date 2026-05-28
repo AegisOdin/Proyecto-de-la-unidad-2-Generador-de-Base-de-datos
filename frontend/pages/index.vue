@@ -61,7 +61,6 @@
           <div class="tabla-nombre">{{ t.nombre }}</div>
           <div class="tabla-meta">{{ t.atributos.length }} atributo(s)</div>
           <div class="tabla-actions">
-            <button class="btn descargar-alt" @click="handleGenerar(t)">Descargar PHP</button>
             <NuxtLink :to="`/crud/${resultado.baseDatos}/${t.nombre}`" class="btn ejecutar btn-link">
               Probar en vivo
             </NuxtLink>
@@ -123,17 +122,7 @@ fin
 cerrar`
 
 const codigo = ref(defaultCode)
-const { estado, resultado, compilar, descargarSQL, ejecutar, generarCrud } = useCompilador()
-
-async function handleGenerar(tabla: import('~/types').Tabla) {
-  if (!resultado.value?.baseDatos) return
-  try {
-    await generarCrud(resultado.value.baseDatos, tabla)
-  } catch (e: unknown) {
-    const msg = e instanceof Error ? e.message : 'Error generando código'
-    toast.value = { visible: true, exito: false, mensaje: msg }
-  }
-}
+const { estado, resultado, compilar, descargarSQL, ejecutar } = useCompilador()
 
 const modalAbierto = ref(false)
 const ejecutando = ref(false)
